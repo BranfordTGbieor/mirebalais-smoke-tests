@@ -1,19 +1,18 @@
 package org.openmrs.module.mirebalais.smoke;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
-
-import java.util.Arrays;
-
 import org.hamcrest.Matchers;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openmrs.module.mirebalais.smoke.dataModel.BasicReportData;
 import org.openmrs.module.mirebalais.smoke.pageobjects.BasicReportPage;
 import org.openmrs.module.mirebalais.smoke.pageobjects.EmergencyCheckin;
 import org.openmrs.module.mirebalais.smoke.pageobjects.LoginPage;
+
+import java.util.Arrays;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 public class EmergencyCheckinTest extends BasicMirebalaisSmokeTest {
 
@@ -22,17 +21,14 @@ public class EmergencyCheckinTest extends BasicMirebalaisSmokeTest {
     
     @Before
     public void setUp() {
+        loginPage = new LoginPage(driver);
+    	loginPage.logInAsAdmin();
+
     	initBasicPageObjects();
         emergencyCheckinPO = new EmergencyCheckin(driver);
         basicReport = new BasicReportPage(driver);
     }
 
-    @BeforeClass
-    public static void setUpEnvironment() {
-    	loginPage = new LoginPage(driver);
-    	loginPage.logInAsAdmin();
-    }
-    
     @Test
     public void checkinOnEmergencyShouldCountOnReports() {
     	appDashboard.openReportApp();

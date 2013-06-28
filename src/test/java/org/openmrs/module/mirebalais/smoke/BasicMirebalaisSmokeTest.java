@@ -1,21 +1,18 @@
 package org.openmrs.module.mirebalais.smoke;
 
-import java.net.URL;
-import java.util.concurrent.TimeUnit;
-
-import org.apache.commons.lang.SystemUtils;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.apache.commons.lang3.SystemUtils;
+import org.junit.After;
+import org.junit.Before;
 import org.openmrs.module.mirebalais.smoke.dataModel.Patient;
 import org.openmrs.module.mirebalais.smoke.helper.Waiter;
-import org.openmrs.module.mirebalais.smoke.pageobjects.AppDashboard;
-import org.openmrs.module.mirebalais.smoke.pageobjects.LoginPage;
-import org.openmrs.module.mirebalais.smoke.pageobjects.PatientDashboard;
-import org.openmrs.module.mirebalais.smoke.pageobjects.PatientRegistrationDashboard;
-import org.openmrs.module.mirebalais.smoke.pageobjects.Registration;
-import org.openmrs.module.mirebalais.smoke.pageobjects.SmokeTestProperties;
+import org.openmrs.module.mirebalais.smoke.pageobjects.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 public abstract class BasicMirebalaisSmokeTest {
 
@@ -27,18 +24,25 @@ public abstract class BasicMirebalaisSmokeTest {
     protected PatientDashboard patientDashboard;
     protected Patient testPatient;
 	
-	protected static ChromeDriver driver;
+	protected RemoteWebDriver driver;
 
-    @BeforeClass
-    public static void startWebDriver() {
+    @Before
+    public void startWebDriver() throws MalformedURLException {
         setupChromeDriver();
     	driver = new ChromeDriver();
+//        DesiredCapabilities capabilities = new DesiredCapabilities();
+//        capabilities.setJavascriptEnabled(true);
+//        capabilities.setCapability("takesScreenshot", false);
+//        capabilities.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY,
+//                "src/test/resources/phantomjsdriver/mac/phantomjs");
+
+//        driver = new PhantomJSDriver(capabilities);
         driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
     	driver.get(new SmokeTestProperties().getWebAppUrl());
     }
 
-	@AfterClass
-    public static void stopWebDriver() {
+	@After
+    public void stopWebDriver() {
         driver.quit();
     }
 	

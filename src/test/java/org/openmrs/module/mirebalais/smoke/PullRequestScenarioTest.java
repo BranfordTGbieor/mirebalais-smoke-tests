@@ -1,7 +1,6 @@
 package org.openmrs.module.mirebalais.smoke;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openmrs.module.mirebalais.smoke.pageobjects.CheckIn;
 import org.openmrs.module.mirebalais.smoke.pageobjects.LoginPage;
@@ -15,15 +14,12 @@ public class PullRequestScenarioTest extends BasicMirebalaisSmokeTest {
 	
 	@Before
     public void setUp() {
+        loginPage = new LoginPage(driver);
+    	loginPage.logInAsAdmin();
+
 		initBasicPageObjects();
 		checkIn = new CheckIn(driver);
 	}
-
-	@BeforeClass
-    public static void setUpEnvironment() {
-    	loginPage = new LoginPage(driver);
-    	loginPage.logInAsAdmin();
-    }
 
 	@Test
 	public void createsARecord() throws InterruptedException {

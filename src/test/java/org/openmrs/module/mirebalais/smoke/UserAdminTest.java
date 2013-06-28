@@ -1,12 +1,8 @@
 package org.openmrs.module.mirebalais.smoke;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openmrs.module.mirebalais.smoke.helper.NameGenerator;
 import org.openmrs.module.mirebalais.smoke.helper.Toast;
@@ -15,6 +11,10 @@ import org.openmrs.module.mirebalais.smoke.pageobjects.MyAccountApp;
 import org.openmrs.module.mirebalais.smoke.pageobjects.UserAdmin;
 import org.openqa.selenium.By;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.*;
+
+@Ignore
 public class UserAdminTest extends BasicMirebalaisSmokeTest {
 
     private UserAdmin userAdmin;
@@ -167,6 +167,7 @@ public class UserAdminTest extends BasicMirebalaisSmokeTest {
        
     private void logOutAndLogInWithNewUser(String username) {
     	header.logOut();
+        driver.get(properties.getWebAppUrl());
     	loginPage.logIn(username, DEFAULT_PASSWORD);
     }
     
