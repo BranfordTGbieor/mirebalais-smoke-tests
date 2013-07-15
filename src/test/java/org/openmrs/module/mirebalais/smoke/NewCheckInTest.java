@@ -29,8 +29,6 @@ public class NewCheckInTest extends DbTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		super.setUp();
-		
 		initBasicPageObjects();
 		newCheckIn = new NewCheckIn(driver);
 	}

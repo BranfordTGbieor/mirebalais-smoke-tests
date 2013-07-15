@@ -1,12 +1,12 @@
 package org.openmrs.module.mirebalais.smoke;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.module.mirebalais.smoke.pageobjects.InPatientList;
 import org.openmrs.module.mirebalais.smoke.pageobjects.PatientDashboard;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class InPatientTest extends DbTest {
 
@@ -14,7 +14,6 @@ public class InPatientTest extends DbTest {
 	
 	@Before
 	public void setUp() throws Exception {
-        super.setUp();
 		initBasicPageObjects();
 		inPatientList = new InPatientList(driver);
     }

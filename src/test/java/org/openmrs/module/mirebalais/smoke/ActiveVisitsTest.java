@@ -14,20 +14,18 @@
 
 package org.openmrs.module.mirebalais.smoke;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.matchers.JUnitMatchers.containsString;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+import static org.junit.matchers.JUnitMatchers.containsString;
+
 public class ActiveVisitsTest extends DbTest {
 	
 	@Before
-	public void setUp() throws Exception {
-		super.setUp();
-		
+	public void setUp() {
 		initBasicPageObjects();
 	}
 	

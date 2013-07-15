@@ -1,11 +1,11 @@
 package org.openmrs.module.mirebalais.smoke;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.module.mirebalais.smoke.pageobjects.ArchivesRoomApp;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class ArchivesRoomFlowTest extends DbTest {
 	
@@ -13,8 +13,6 @@ public class ArchivesRoomFlowTest extends DbTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		super.setUp();
-		
 		initBasicPageObjects();
 		archivesRoomApp = new ArchivesRoomApp(driver);
 	}

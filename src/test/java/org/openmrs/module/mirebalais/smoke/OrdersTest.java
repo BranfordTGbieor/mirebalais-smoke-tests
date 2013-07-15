@@ -15,7 +15,6 @@ public class OrdersTest extends DbTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		super.setUp();
 		initBasicPageObjects();
 	}
 	

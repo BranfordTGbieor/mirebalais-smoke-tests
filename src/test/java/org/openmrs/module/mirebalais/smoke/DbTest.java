@@ -3,13 +3,16 @@ package org.openmrs.module.mirebalais.smoke;
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 import org.apache.commons.io.IOUtils;
-import org.dbunit.JdbcDatabaseTester;
+import org.dbunit.database.DatabaseConfig;
+import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.database.QueryDataSet;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+import org.dbunit.ext.mysql.MySqlDataTypeFactory;
+import org.dbunit.ext.mysql.MySqlMetadataHandler;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -22,33 +25,38 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.UUID;
 
 public abstract class DbTest extends BasicMirebalaisSmokeTest {
 
 	private static SmokeTestProperties properties = new SmokeTestProperties();
 
-	private static JdbcDatabaseTester tester;
+    private static DatabaseConnection connection;
 
-	private IDataSet dataset;
+    private IDataSet dataset;
 
 	private String patientIdentifierValue;
 
     private static Object synch = new Object();
 
-	@BeforeClass
-	public static void setDatabaseConnection() throws ClassNotFoundException {
-		tester = new JdbcDatabaseTester(properties.getDatabaseDriverClass(), properties.getDatabaseUrl(),
-		        properties.getDatabaseUsername(), properties.getDatabasePassword());
-	}
+    @BeforeClass
+	public static void setDatabaseConnection() throws Exception {
+		Connection jdbcConnection = DriverManager.getConnection(properties.getDatabaseUrl(), properties.getDatabaseUsername(), properties.getDatabasePassword());
+        connection = new DatabaseConnection(jdbcConnection);
+
+        DatabaseConfig config = connection.getConfig();
+        config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new MySqlDataTypeFactory());
+        config.setProperty(DatabaseConfig.PROPERTY_METADATA_HANDLER, new MySqlMetadataHandler());
+    }
 
 	@AfterClass
 	public static void closeDatabaseConnection() throws Exception {
-		tester.closeConnection(tester.getConnection());
+		connection.close();
 	}
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUpPatientData() throws Exception {
         synchronized (synch) {
             try {
                 testPatient = new Patient(getNextValidPatientIdentifier(), "Crash Test Dummy",
@@ -68,9 +76,11 @@ public abstract class DbTest extends BasicMirebalaisSmokeTest {
             }
         }
 	}
+public void setUp() throws Exception {
 
+}
 	@After
-	public void tearDown() throws Exception {
+	public void tearDownPatientData() throws Exception {
 		try {
 			QueryDataSet createdData = new QueryDataSet(getConnection());
 			createdData.addTable("obs",
@@ -120,8 +130,8 @@ public abstract class DbTest extends BasicMirebalaisSmokeTest {
 	}
 	
 	protected IDatabaseConnection getConnection() throws Exception {
-		return tester.getConnection();
-	}
+        return connection;
+    }
 	
 	private IDataSet createDataset() throws IOException, DataSetException {
 		Handlebars handlebars = new Handlebars();
