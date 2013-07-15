@@ -42,7 +42,8 @@ public abstract class DbTest extends BasicMirebalaisSmokeTest {
 
     @BeforeClass
 	public static void setDatabaseConnection() throws Exception {
-		Connection jdbcConnection = DriverManager.getConnection(properties.getDatabaseUrl(), properties.getDatabaseUsername(), properties.getDatabasePassword());
+        Class.forName(properties.getDatabaseDriverClass());
+        Connection jdbcConnection = DriverManager.getConnection(properties.getDatabaseUrl(), properties.getDatabaseUsername(), properties.getDatabasePassword());
         connection = new DatabaseConnection(jdbcConnection);
 
         DatabaseConfig config = connection.getConfig();
