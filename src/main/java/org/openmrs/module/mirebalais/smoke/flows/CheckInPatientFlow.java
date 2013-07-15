@@ -25,7 +25,7 @@ public class CheckInPatientFlow {
     public void checkIn() {
         checkinFormPage.enterInfo();
 
-        new WebDriverWait(driver, 5).until(ExpectedConditions.visibilityOfElementLocated(By.className("confirm")));
+        new WebDriverWait(driver, 30).until(ExpectedConditions.visibilityOfElementLocated(By.className("confirm")));
         driver.findElement(By.className("confirm")).click();
     }
 

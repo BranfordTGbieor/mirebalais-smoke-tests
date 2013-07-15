@@ -25,28 +25,28 @@ import java.sql.Connection;
 import java.util.UUID;
 
 public abstract class DbTest extends BasicMirebalaisSmokeTest {
-	
+
 	private static SmokeTestProperties properties = new SmokeTestProperties();
-	
+
 	private static JdbcDatabaseTester tester;
-	
+
 	private IDataSet dataset;
-	
+
 	private String patientIdentifierValue;
 
     private static Object synch = new Object();
-	
+
 	@BeforeClass
 	public static void setDatabaseConnection() throws ClassNotFoundException {
 		tester = new JdbcDatabaseTester(properties.getDatabaseDriverClass(), properties.getDatabaseUrl(),
 		        properties.getDatabaseUsername(), properties.getDatabasePassword());
 	}
-	
+
 	@AfterClass
 	public static void closeDatabaseConnection() throws Exception {
 		tester.closeConnection(tester.getConnection());
 	}
-	
+
 	@Before
 	public void setUp() throws Exception {
         synchronized (synch) {
@@ -68,7 +68,7 @@ public abstract class DbTest extends BasicMirebalaisSmokeTest {
             }
         }
 	}
-	
+
 	@After
 	public void tearDown() throws Exception {
 		try {
@@ -77,7 +77,7 @@ public abstract class DbTest extends BasicMirebalaisSmokeTest {
 			    "select * from obs where encounter_id in (select encounter_id from encounter where patient_id="
 			            + testPatient.getId() + ") and obs_group_id is not null");
 			DatabaseOperation.DELETE.execute(getConnection(), createdData);
-			
+
 			createdData = new QueryDataSet(getConnection());
 			createdData.addTable("name_phonetics",
 			    "select * from name_phonetics where person_name_id = " + testPatient.getPerson_name_id());
