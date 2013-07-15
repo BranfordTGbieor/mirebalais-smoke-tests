@@ -33,6 +33,8 @@ public abstract class DbTest extends BasicMirebalaisSmokeTest {
 	private IDataSet dataset;
 	
 	private String patientIdentifierValue;
+
+    private static Object synch = new Object();
 	
 	@BeforeClass
 	public static void setDatabaseConnection() throws ClassNotFoundException {
@@ -47,22 +49,24 @@ public abstract class DbTest extends BasicMirebalaisSmokeTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		try {
-			testPatient = new Patient(getNextValidPatientIdentifier(), "Crash Test Dummy",
-			        getNextAutoIncrementFor("person"), UUID.randomUUID().toString(), getPatientIdentifierId(),
-			        getNextAutoIncrementFor("person_name"), getNextAutoIncrementFor("person_address"),
-			        getNextAutoIncrementFor("patient_identifier"));
-			
-			lockPatientIdentifier();
-			
-			dataset = createDataset();
-			
-			DatabaseOperation.INSERT.execute(getConnection(), dataset);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			throw new Exception("set up failed", e);
-		}
+        synchronized (synch) {
+            try {
+                testPatient = new Patient(getNextValidPatientIdentifier(), "Crash Test Dummy",
+                        getNextAutoIncrementFor("person"), UUID.randomUUID().toString(), getPatientIdentifierId(),
+                        getNextAutoIncrementFor("person_name"), getNextAutoIncrementFor("person_address"),
+                        getNextAutoIncrementFor("patient_identifier"));
+
+                lockPatientIdentifier();
+
+                dataset = createDataset();
+
+                DatabaseOperation.INSERT.execute(getConnection(), dataset);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                throw new Exception("set up failed", e);
+            }
+        }
 	}
 	
 	@After
@@ -91,14 +95,14 @@ public abstract class DbTest extends BasicMirebalaisSmokeTest {
 			    "select * from test_order where order_id in (select order_id from orders where patient_id="
 			            + testPatient.getId() + ")");
 			createdData.addTable("emr_radiology_order",
-			    "select * from emr_radiology_order where order_id in (select order_id from orders where patient_id="
-			            + testPatient.getId() + ")");
+                    "select * from emr_radiology_order where order_id in (select order_id from orders where patient_id="
+                            + testPatient.getId() + ")");
 			createdData.addTable("obs",
 			    "select * from obs where encounter_id in (select encounter_id from encounter where patient_id="
 			            + testPatient.getId() + ")");
 			createdData.addTable("encounter_provider",
-			    "select * from encounter_provider where encounter_id in (select encounter_id from encounter where patient_id="
-			            + testPatient.getId() + ")");
+                    "select * from encounter_provider where encounter_id in (select encounter_id from encounter where patient_id="
+                            + testPatient.getId() + ")");
 			
 			DatabaseOperation.DELETE.execute(getConnection(), createdData);
 			

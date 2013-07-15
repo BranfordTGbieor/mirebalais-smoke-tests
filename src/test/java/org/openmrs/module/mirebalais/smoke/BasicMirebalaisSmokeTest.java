@@ -1,7 +1,7 @@
 package org.openmrs.module.mirebalais.smoke;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
 import org.openmrs.module.mirebalais.smoke.dataModel.Patient;
 import org.openmrs.module.mirebalais.smoke.helper.SmokeTestDriver;
 import org.openmrs.module.mirebalais.smoke.pageobjects.AppDashboard;
@@ -15,7 +15,7 @@ public abstract class BasicMirebalaisSmokeTest {
 	
 	protected static LoginPage loginPage;
 	
-	protected static WebDriver driver;
+	protected WebDriver driver;
 	
 	protected AppDashboard appDashboard;
 	
@@ -27,13 +27,13 @@ public abstract class BasicMirebalaisSmokeTest {
 	
 	protected Patient testPatient;
 	
-	@BeforeClass
-	public static void startWebDriver() {
+	@Before
+	public void startWebDriver() {
 		driver = new SmokeTestDriver().getDriver();
 	}
 	
-	@AfterClass
-	public static void stopWebDriver() {
+	@After
+	public void stopWebDriver() {
 		driver.quit();
 	}
 	

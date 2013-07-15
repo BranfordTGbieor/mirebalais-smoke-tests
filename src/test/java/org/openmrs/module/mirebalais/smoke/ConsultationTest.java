@@ -1,26 +1,21 @@
 package org.openmrs.module.mirebalais.smoke;
 
+import org.junit.Before;
+import org.junit.Test;
+import org.openmrs.module.mirebalais.smoke.pageobjects.PatientDashboard;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.openmrs.module.mirebalais.smoke.pageobjects.LoginPage;
-import org.openmrs.module.mirebalais.smoke.pageobjects.PatientDashboard;
-
 public class ConsultationTest extends DbTest {
 
-    @BeforeClass
-	public static void prepare() {
-		new LoginPage(driver).logInAsAdmin();
-	}
-	
-	@Before
+    @Before
 	public void setUp() throws Exception {
 		super.setUp();
 		
 		initBasicPageObjects();
+
+        login();
 		
 		appDashboard.goToPatientPage(testPatient.getId());
 		patientDashboard.startVisit();
